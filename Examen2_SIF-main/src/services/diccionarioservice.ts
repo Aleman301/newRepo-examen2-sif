@@ -12,6 +12,7 @@ class DiccionarioService{
     private palabraImprimirRevenge
     private actualCategoria
     private valorescorrectos = []
+    private intentos = 0
 
     newData=[
         {"palabra": "oso" , "categoria": "animal"}
@@ -97,9 +98,9 @@ class DiccionarioService{
             let mitad = this.palabraActual.palabra.length
             let division = mitad / 2
             let redondear = Math.floor(division)
-            let intentos = redondear +1
+            this.intentos = redondear +1
 
-            console.log("ud tiene " + intentos +  " intentos")
+            console.log("ud tiene " + this.intentos +  " intentos")
             console.log(palabraImprimir)
 
         }else{
@@ -110,12 +111,14 @@ class DiccionarioService{
 
      public async enviarDato(enviarDatoDTO: enviarDato){
             let letra = enviarDatoDTO.dato
+            let flag = false
             
             let valoresAnteriores = this.palabraImprimirRevenge
             this.palabraImprimirRevenge = ""
             for(let i=0; i<this.palabraActual.palabra.length; i++){
                 if(this.palabraActual.palabra[i]==letra){
                     this.palabraImprimirRevenge = this.palabraImprimirRevenge + letra
+                    flag=true
                 }else if(valoresAnteriores){
                     if(this.palabraActual.palabra[i]==valoresAnteriores[i]){
                         this.palabraImprimirRevenge = this.palabraImprimirRevenge + valoresAnteriores[i]
@@ -126,23 +129,29 @@ class DiccionarioService{
                 }
                 else{
                     this.palabraImprimirRevenge = this.palabraImprimirRevenge + "_"
+                    
                 }
-
-
             }
+
+            if(!flag){
+                this.intentos--
+            }
+
+            if(this.intentos<=0){
+                console.log("has perido")
+                return
+            }
+
 
             if(this.palabraImprimirRevenge == this.palabraActual.palabra){
                 console.log(this.palabraImprimirRevenge)
                 console.log("felicidades, compeltaste la palabra! :)")
                 this.palabraImprimirRevenge = undefined
+                flag=false
                 this.palabraActual = undefined
             }else{
-                let mitad = this.palabraActual.palabra.length
-                let division = mitad / 2
-                let redondear = Math.floor(division)
-                let intentos = redondear +1
-
-                console.log("ud tiene " + intentos +  " intentos")
+                flag=false
+                console.log("ud tiene " + this.intentos +  " intentos")
                 console.log(this.palabraImprimirRevenge)
             }
 
