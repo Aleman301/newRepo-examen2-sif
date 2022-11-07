@@ -4,6 +4,7 @@ import { Router, Request, Response } from "express";
 import diccionarioservice from "../services/diccionarioservice";
 import { CreateCategoryDto } from "../validadorDto";
 import { selectCategory } from "../dtos/selectCategoryDto";
+import { selectIndice } from "../dtos/selectIndiceDto";
 
 export class DiccionarioControllers{
 
@@ -63,15 +64,28 @@ export class DiccionarioControllers{
 
     }
 
-    async seleccionarIndice(){
-        console.log("seleccionaste un indice")
+    async seleccionarIndice(req: Request, res: Response): Promise<Response>{
+        let payload = req.body
+
+        let formateo = plainToClass(selectIndice, payload)
+        
+        const errors = await validate(formateo)
+        if(errors.length>0){
+            console.log(errors)
+
+            return res.status(400).json({
+                "validation-errors": errors
+            })
+        }
+
+        return res.json(
+            await diccionarioservice.selectIndice(formateo)
+        )
     }
 
     async create(req: Request, res: Response): Promise<Response>{
         let payload = req.body
-      /*  if(!payload){
-            payload={"name":"probando"}
-        }*/
+
         let formateo = plainToClass(CreateCategoryDto, payload)
         
         const errors = await validate(formateo)

@@ -2,10 +2,14 @@ import fs from 'fs' //leer archivo .json y para escribir en archivo
 import path from 'path' //modulo de node para realizar acciones con rutas de archivos
 import { Json } from 'sequelize/types/utils';
 import { selectCategory } from '../dtos/selectCategoryDto';
+import { selectIndice } from '../dtos/selectIndiceDto';
 import { CreateCategoryDto} from "../validadorDto"
 class DiccionarioService{
 
     public diccionario=[]; //almacenar los datos del json de manera temporal
+
+    private actualCategoria
+    private valorescorrectos = []
 
     newData=[
         {"palabra": "oso" , "categoria": "animal"}
@@ -35,25 +39,28 @@ class DiccionarioService{
             }
          
         })
-        let valorescorrectos=[]
+        this.valorescorrectos=[]
         let indice = 0
         
         console.log("seleccione una de las siguientes opciones enviando por POST el indice")
         for (let i = 0; i <= word.length; i++) {
             if(word[i]){
-                valorescorrectos.push(word[i])
+                this.valorescorrectos.push(word[i])
 
                 let cantidadLetras=word[i].palabra.length
                 let palabraImpriimr = ""
                 //console.log(word[i].palabra)
                 for(let j =0; j<cantidadLetras;j++){
-                    palabraImpriimr=palabraImpriimr+"_"
+                    palabraImpriimr=palabraImpriimr+" _"
                 }
                 indice++
                 console.log((indice)+":"+palabraImpriimr)
             }
             
         }
+
+        this.actualCategoria = palabra
+
     }
 
     public async create(createCategoryDTO: CreateCategoryDto){
@@ -68,6 +75,26 @@ class DiccionarioService{
         }
 
      }
+
+     public async selectIndice(selectIndiceDto: selectIndice){
+
+        let indice = Number(selectIndiceDto.indice)
+
+        if(indice){
+            let palabraActual=this.valorescorrectos.find((valorActual, index)=>{
+                if(index==(indice-1)){
+                    return valorActual
+                }
+            })
+
+            console.log(palabraActual)
+
+        }else{
+            console.log("no sleccionaste nada")
+        }
+
+     }
+
 }
 
 export default new DiccionarioService();
