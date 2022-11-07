@@ -5,6 +5,7 @@ import diccionarioservice from "../services/diccionarioservice";
 import { CreateCategoryDto } from "../validadorDto";
 import { selectCategory } from "../dtos/selectCategoryDto";
 import { selectIndice } from "../dtos/selectIndiceDto";
+import { enviarDato } from "../dtos/enviardatodto";
 
 export class DiccionarioControllers{
 
@@ -20,6 +21,7 @@ export class DiccionarioControllers{
         this.router.get('/diccionarios/:palabra', this.getNombre)
         this.router.post('/diccionarios/category', this.seleccionarCategoria)
         this.router.post('/diccionarios/indice', this.seleccionarIndice)
+        this.router.post('/diccionarios/enviardato', this.enviarDato)
         //this.router.get('/diccionarios/:categoria', this.getListByCategoria)
         this.router.post('/diccionarios', this.create)
     }
@@ -80,6 +82,25 @@ export class DiccionarioControllers{
 
         return res.json(
             await diccionarioservice.selectIndice(formateo)
+        )
+    }
+
+    async enviarDato(req: Request, res: Response): Promise<Response>{
+        let payload = req.body
+
+        let formateo = plainToClass(enviarDato, payload)
+        
+        const errors = await validate(formateo)
+        if(errors.length>0){
+            console.log(errors)
+
+            return res.status(400).json({
+                "validation-errors": errors
+            })
+        }
+
+        return res.json(
+            await diccionarioservice.enviarDato(formateo)
         )
     }
 

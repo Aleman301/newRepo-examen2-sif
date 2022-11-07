@@ -1,13 +1,15 @@
 import fs from 'fs' //leer archivo .json y para escribir en archivo
 import path from 'path' //modulo de node para realizar acciones con rutas de archivos
 import { Json } from 'sequelize/types/utils';
+import { enviarDato } from '../dtos/enviardatodto';
 import { selectCategory } from '../dtos/selectCategoryDto';
 import { selectIndice } from '../dtos/selectIndiceDto';
 import { CreateCategoryDto} from "../validadorDto"
 class DiccionarioService{
 
     public diccionario=[]; //almacenar los datos del json de manera temporal
-
+    private palabraActual
+    private palabraImprimirRevenge
     private actualCategoria
     private valorescorrectos = []
 
@@ -81,18 +83,71 @@ class DiccionarioService{
         let indice = Number(selectIndiceDto.indice)
 
         if(indice){
-            let palabraActual=this.valorescorrectos.find((valorActual, index)=>{
+            this.palabraActual=this.valorescorrectos.find((valorActual, index)=>{
                 if(index==(indice-1)){
                     return valorActual
                 }
             })
 
-            console.log(palabraActual)
+            let palabraImprimir = ""
+            for(let i=0; i<this.palabraActual.palabra.length; i++){
+                palabraImprimir = palabraImprimir +  " _"
+            }
+
+            let mitad = this.palabraActual.palabra.length
+            let division = mitad / 2
+            let redondear = Math.floor(division)
+            let intentos = redondear +1
+
+            console.log("ud tiene " + intentos +  " intentos")
+            console.log(palabraImprimir)
 
         }else{
             console.log("no sleccionaste nada")
         }
 
+     }
+
+     public async enviarDato(enviarDatoDTO: enviarDato){
+            let letra = enviarDatoDTO.dato
+            
+            let valoresAnteriores = this.palabraImprimirRevenge
+            this.palabraImprimirRevenge = ""
+            for(let i=0; i<this.palabraActual.palabra.length; i++){
+                if(this.palabraActual.palabra[i]==letra){
+                    this.palabraImprimirRevenge = this.palabraImprimirRevenge + letra
+                }else if(valoresAnteriores){
+                    if(this.palabraActual.palabra[i]==valoresAnteriores[i]){
+                        this.palabraImprimirRevenge = this.palabraImprimirRevenge + valoresAnteriores[i]
+                    }else{
+                        this.palabraImprimirRevenge = this.palabraImprimirRevenge + "_"
+                    }
+                    
+                }
+                else{
+                    this.palabraImprimirRevenge = this.palabraImprimirRevenge + "_"
+                }
+
+
+            }
+
+            if(this.palabraImprimirRevenge == this.palabraActual.palabra){
+                console.log(this.palabraImprimirRevenge)
+                console.log("felicidades, compeltaste la palabra! :)")
+                this.palabraImprimirRevenge = undefined
+                this.palabraActual = undefined
+            }else{
+                let mitad = this.palabraActual.palabra.length
+                let division = mitad / 2
+                let redondear = Math.floor(division)
+                let intentos = redondear +1
+
+                console.log("ud tiene " + intentos +  " intentos")
+                console.log(this.palabraImprimirRevenge)
+            }
+
+            
+        
      }
 
 }
