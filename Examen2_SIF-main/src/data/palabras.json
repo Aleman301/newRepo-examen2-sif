@@ -1,0 +1,8 @@
+[
+    {"palabra": "uva" , "categoria": "fruta"},
+    {"palabra": "fresa" , "categoria": "fruta"},
+    {"palabra": "melon" , "categoria": "fruta"},
+    {"palabra": "soleado" , "categoria": "clima"},
+    {"palabra": "nublado" , "categoria": "clima"},
+    {"palabra": "lluvioso" , "categoria": "clima"}
+]
