@@ -1,5 +1,7 @@
 ### INSTRUCCIONES PARA CORRER EL JUEGO
 
+WILMER ANDRE FLORES LAGOS 20202100021 Y ROLANDO JOSUE MEJIA ALEMAN 20202100071
+
 Todo el juego se correra por medio de la consola, en donde usaremos la aplicacion de Insomnia para poder mandar la informacion dentro de la consola
 
 -Por medio de un metodo get iniciamos el juego utilizando la URL http://localhost:3000/api/diccionarios
@@ -26,3 +28,5 @@ en donde se coloca el numero 2 se podra colocar cualquier numero que muestre en 
 }
 
 en donde se colocaran las letras dentro las comillas donde se encuentra la letra g que es de ejemplo.
+
+WILMER ANDRE FLORES LAGOS 20202100021 Y ROLANDO JOSUE MEJIA ALEMAN 20202100071
